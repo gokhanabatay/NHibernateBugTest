@@ -14,6 +14,7 @@ namespace NHibernateBugTest.Session
     public class SqlNumberDate : SqlNumberDateTime
     {
         protected override string Format { get; } = "yyyyMMdd";
+        public static readonly DateTime DefaultDate = new DateTime(1900,1,1);
 
         /// <summary>
         /// Write an instance of the mapped class to a prepared statement.
