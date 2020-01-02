@@ -60,7 +60,6 @@ namespace NHibernateBugTest
         [Test, Order(2)]
         public void Retrieve_TxnIssuer_Success()
         {
-            //Sets Current Session
             using (ISession session = SessionProvider.ISessionFactory
                                         .WithOptions()
                                         .Interceptor(new ContextInterceptor())
@@ -70,6 +69,7 @@ namespace NHibernateBugTest
                 {
                     var listOfGuids = session.Query<TxnIssuer>().Select(x => x.Guid).ToList();
 
+                    //Below query updates MrcDailyMoved and MrcDailyMovedDate with success
                     session.Query<TxnIssuer>()
                                .Where(x => listOfGuids.Contains(x.Guid))
                                .Update(x => new TxnIssuer
@@ -82,6 +82,8 @@ namespace NHibernateBugTest
                         .Where(x => x.MrcDailyMoved == "Y")
                         .ToList().Count == 10);
 
+                    //This Update Statement Creates wrong Sql, I think expression cache does not include Update fields to statement so above and below linq creates or use the same statement.
+                    //Below query updates MrcDailyMoved and MrcDailyMovedDate instead of CycleMoved,CycleMovedDate
                     session.Query<TxnIssuer>()
                               .Where(x => listOfGuids.Contains(x.Guid))
                               .Update(x => new TxnIssuer
