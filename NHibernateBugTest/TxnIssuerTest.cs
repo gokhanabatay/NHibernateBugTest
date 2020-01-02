@@ -58,7 +58,7 @@ namespace NHibernateBugTest
         }
 
         [Test, Order(2)]
-        public void Retrieve_TxnIssuer_Success()
+        public void UpdateRetrieve_TxnIssuer_Fails()
         {
             using (ISession session = SessionProvider.ISessionFactory
                                         .WithOptions()
