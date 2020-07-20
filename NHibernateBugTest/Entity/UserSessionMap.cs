@@ -13,6 +13,7 @@ namespace NHibernateBugTest.Entity
             Map(x => x.UserCode).Column("USER_CODE").Not.Nullable().Length(50);
             Map(x => x.OpenDate).Column("OPEN_DATE").CustomType<SqlNumberDate>().Precision(8);
             Map(x => x.ExpireDateTime).Column("EXPIRE_DATE_TIME").CustomType<SqlNumberDateTime>().Precision(17);
+            Map(x => x.IsOpen).Column("IS_OPEN").CustomType<SqlBoolean>().Precision(8);
             Map(x => x.RemoteIpAddress).Column("REMOTE_IP_ADDRESS").Length(39);
             Map(x => x.RemotePort).Column("REMOTE_PORT").Length(5);
             Map(x => x.LocalIpAddress).Column("LOCAL_IP_ADDRESS").Length(39);

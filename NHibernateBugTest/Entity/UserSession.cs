@@ -12,6 +12,7 @@ namespace NHibernateBugTest.Entity
 
         public virtual DateTime? OpenDate { get; set; }
         public virtual DateTime? ExpireDateTime { get; set; }
+        public virtual bool IsOpen { get; set; }
 
         public virtual string RemoteIpAddress { get; set; }
         public virtual string RemotePort { get; set; }

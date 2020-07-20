@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+  <PackageReference Include="FluentNHibernate" Version="2.1.2" />
+  <PackageReference Include="log4net" Version="2.0.8" />
+  <PackageReference Include="Log4Net.Async.Standard" Version="3.1.0" />
+  <PackageReference Include="NHibernate" Version="5.2.6" />
+  <PackageReference Include="Npgsql" Version="4.1.2" />
+    </ItemGroup>
+  <ItemGroup>
+    <None Update="hibernate.cfg.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -93,7 +93,7 @@ namespace NHibernateBugTest
                 using (ITransaction transaction = session.BeginTransaction())
                 {
 
-                    Assert.That(session.Query<UserSession>().ToList().Count == 10);
+                    Assert.That(session.Query<UserSession>().ToList().Count == 20);
                 }
             }
         }
