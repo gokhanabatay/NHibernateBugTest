@@ -31,6 +31,14 @@ namespace NHibernateBugTest
             {
                 using (ITransaction transaction = session.BeginTransaction())
                 {
+                    User user = new User()
+                    {
+                        UserCode = "gokhanabatay",
+                        IsOpen = true,
+                        UserName = "Gökhan Abatay"
+                    };
+                    session.Save(user);
+
                     for (int i = 0; i < 10; i++)
                     {
                         UserSession userSession = new UserSession()
@@ -66,7 +74,24 @@ namespace NHibernateBugTest
         }
 
         [Test, Order(2)]
-        public void Get_UserSession_FailsWithDateCustomType()
+        public void Get_DateCustomType_NullableDateValueEquals_IncorrectCast()
+        {
+            using (ISession session = SessionProvider.ISessionFactory
+                                        .WithOptions()
+                                        .Interceptor(new ContextInterceptor())
+                                        .OpenSession())
+            {
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    Assert.That(session.Query<UserSession>()
+                        .Where(x => x.OpenDate.Value == DateTime.Now)
+                        .ToList().Count == 10);
+                }
+            }
+        }
+
+        [Test, Order(3)]
+        public void Get_DateCustomType_SuccessDateEquals()
         {
             using (ISession session = SessionProvider.ISessionFactory
                                         .WithOptions()
@@ -82,9 +107,16 @@ namespace NHibernateBugTest
             }
         }
 
-        [Test, Order(3)]
-        public void Get_UserSession_FailsWithBooleanCustomType()
+        public class NullableBooleanResult
         {
+            public bool? IsOpen { get; set; }
+        
+        }
+
+        [Test, Order(4)]
+        public void Get_BooleanCustomType_Fails_IncorrectCast()
+        {
+       
             using (ISession session = SessionProvider.ISessionFactory
                                         .WithOptions()
                                         .Interceptor(new ContextInterceptor())
@@ -94,7 +126,10 @@ namespace NHibernateBugTest
                 {
                     Assert.That(session.Query<UserSession>()
                         .Where(x => x.OpenDate == DateTime.Now)
-                        .Select(x=>x.IsOpen)
+                        .Select(x=>new NullableBooleanResult()
+                        {
+                            IsOpen = x.User.IsOpen
+                        })
                         .ToList().Count == 10);
                 }
             }
