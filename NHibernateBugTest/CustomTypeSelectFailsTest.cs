@@ -4,6 +4,7 @@ using NHibernateBugTest.Entity;
 using NHibernateBugTest.Session;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NHibernateBugTest
@@ -85,6 +86,53 @@ namespace NHibernateBugTest
                 {
                     Assert.That(session.Query<UserSession>()
                         .Where(x => x.OpenDate.Value == DateTime.Now)
+                        .ToList().Count == 10);
+                }
+            }
+        }
+
+        public class LetUsageFailsDto
+        {
+            public string Claims { get; set; }
+        }
+
+        [Test, Order(2)]
+        public void Get_DateCustomType_NullableDateLetUsage_FailsWithEqualsOperator()
+        {
+            using (ISession session = SessionProvider.ISessionFactory
+                                        .WithOptions()
+                                        .Interceptor(new ContextInterceptor())
+                                        .OpenSession())
+            {
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    var items = (from userSession in session.Query<UserSession>()
+                                 where userSession.OpenDate.Equals(DateTime.Now)
+                                 let IsSessionOpen = userSession.IsOpen == true && userSession.ExpireDateTime.Value <= DateTime.Now
+                                 select new LetUsageFailsDto() 
+                                 {                                 
+                                     Claims = IsSessionOpen ? userSession.Claims : string.Empty
+                                 }
+                                 )
+                        .ToList();
+
+                        Assert.That(items.Count == 10);
+                }
+            }
+        }
+
+        [Test, Order(2)]
+        public void Get_DateCustomType_NullableDateValueEqualsV2_IncorrectCast()
+        {
+            using (ISession session = SessionProvider.ISessionFactory
+                                        .WithOptions()
+                                        .Interceptor(new ContextInterceptor())
+                                        .OpenSession())
+            {
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    Assert.That(session.Query<UserSession>()
+                        .Where(x => x.OpenDate.Value.Equals(DateTime.Now))
                         .ToList().Count == 10);
                 }
             }
