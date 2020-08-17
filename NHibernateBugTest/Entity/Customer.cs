@@ -26,6 +26,9 @@ namespace NHibernateBugTest.Entity
         public virtual long Guid { get; set; }
         public virtual string City { get; set; }
         public virtual string AddressText { get; set; }
+
+        public virtual short? AddressType { get; set; }
+
         public virtual Customer Customer { get; set; }
     }
 
@@ -37,6 +40,7 @@ namespace NHibernateBugTest.Entity
             Id(x => x.Guid).Column("GUID").GeneratedBy.Sequence("DefaultSequence");
             Map(x => x.City).Column("CITY").Length(500);
             Map(x => x.AddressText).Column("ADDRESS_TEXT").Length(500);
+            Map(x => x.AddressType).Column("ADDRESS_TYPE").Precision(2);
             References(x => x.Customer).Column("CUSTOMER_GUID");
         }
     }

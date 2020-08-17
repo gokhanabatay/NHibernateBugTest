@@ -1,10 +1,13 @@
 using NHibernate;
+using NHibernate.Engine;
+using NHibernate.Hql.Ast.ANTLR;
 using NHibernate.Linq;
 using NHibernateBugTest.Entity;
 using NHibernateBugTest.Session;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace NHibernateBugTest
@@ -182,5 +185,37 @@ namespace NHibernateBugTest
                 }
             }
         }
+
+        [TestCase(1)]
+        public void NullableShortFieldIsNullConditionTest(short mbrId)
+        {
+            CurrentSession.MbrId = mbrId;
+            //Sets Current Session
+            using (ISession session = SessionProvider.ISessionFactory
+                                        .WithOptions()
+                                        .Interceptor(new ContextInterceptor())
+                                        .OpenSession())
+            {
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    var query = session.Query<Customer>().Where(x => x.Addresses.Any(y => y.AddressType.Value == 2));
+
+                    string querySqlString = GetGeneratedSql(query, session);
+
+                    Assert.IsTrue(!querySqlString.Contains("cast("));
+                }
+            }
+        }
+
+        public string GetGeneratedSql(IQueryable queryable, ISession session)
+        {
+            var sessionImp = (ISessionImplementor)session;
+            var nhLinqExpression = new NhLinqExpression(queryable.Expression, sessionImp.Factory);
+            var translatorFactory = new ASTQueryTranslatorFactory();
+            var translators = translatorFactory.CreateQueryTranslators(nhLinqExpression, null, false, sessionImp.EnabledFilters, sessionImp.Factory);
+
+            return translators[0].SQLString;
+        }
+
     }
 }
