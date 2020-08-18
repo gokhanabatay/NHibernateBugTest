@@ -110,7 +110,7 @@ namespace NHibernateBugTest
                 using (ITransaction transaction = session.BeginTransaction())
                 {
                     var items = (from userSession in session.Query<UserSession>()
-                                 where userSession.OpenDate.Equals(DateTime.Now)
+                                 where userSession.OpenDate.Value.Equals(DateTime.Now)
                                  let IsSessionOpen = userSession.IsOpen == true && userSession.ExpireDateTime.Value <= DateTime.Now
                                  select new LetUsageFailsDto() 
                                  {                                 
@@ -219,7 +219,7 @@ namespace NHibernateBugTest
             {
                 using (ITransaction transaction = session.BeginTransaction())
                 {
-                    var query = session.Query<Customer>().Where(x => x.Addresses.Any(y => y.AddressType.Equals(2)));
+                    var query = session.Query<Customer>().Where(x => x.Addresses.Any(y => y.AddressType.Value.Equals(2)));
 
                     string querySqlString = GetGeneratedSql(query, session);
 
