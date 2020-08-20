@@ -1,4 +1,6 @@
 ﻿using FluentNHibernate.Mapping;
+using NHibernateBugTest.Session;
+using System;
 using System.Collections.Generic;
 
 namespace NHibernateBugTest.Entity
@@ -27,7 +29,15 @@ namespace NHibernateBugTest.Entity
         public virtual string City { get; set; }
         public virtual string AddressText { get; set; }
 
+        public virtual DateTime ChangeDate { get; set; }
+
         public virtual short? AddressType { get; set; }
+
+        public virtual short? AddressType2 { get; set; }
+
+        public virtual long? BankAddressId { get; set; }
+
+        public virtual long? BankAddressId2 { get; set; }
 
         public virtual Customer Customer { get; set; }
     }
@@ -39,8 +49,12 @@ namespace NHibernateBugTest.Entity
             Table("ADDRESS");
             Id(x => x.Guid).Column("GUID").GeneratedBy.Sequence("DefaultSequence");
             Map(x => x.City).Column("CITY").Length(500);
+            Map(x => x.ChangeDate).Column("CHANGE_DATE").CustomType<SqlNumberDate>();
             Map(x => x.AddressText).Column("ADDRESS_TEXT").Length(500);
             Map(x => x.AddressType).Column("ADDRESS_TYPE").Precision(2);
+            Map(x => x.AddressType2).Column("ADDRESS_TYPE2").Precision(2);
+            Map(x => x.BankAddressId).Column("BANK_ADDRESS_ID").Precision(16);
+            Map(x => x.BankAddressId2).Column("BANK_ADDRESS_ID2").Precision(16);
             References(x => x.Customer).Column("CUSTOMER_GUID");
         }
     }

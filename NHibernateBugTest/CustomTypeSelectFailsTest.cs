@@ -228,6 +228,48 @@ namespace NHibernateBugTest
             }
         }
 
+        [TestCase(1)]
+        public void AnyExistsWithNullableShort(short mbrId)
+        {
+            CurrentSession.MbrId = mbrId;
+            //Sets Current Session
+            using (ISession session = SessionProvider.ISessionFactory
+                                        .WithOptions()
+                                        .Interceptor(new ContextInterceptor())
+                                        .OpenSession())
+            {
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    var query = session.Query<Customer>().Where(x => x.Addresses.Any(y => y.AddressType.Value == y.AddressType2.Value));
+
+                    string querySqlString = GetGeneratedSql(query, session);
+
+                    Assert.IsTrue(!querySqlString.Contains("cast("));
+                }
+            }
+        }
+
+        [TestCase(1)]
+        public void AnyExistsWithLong(short mbrId)
+        {
+            CurrentSession.MbrId = mbrId;
+            //Sets Current Session
+            using (ISession session = SessionProvider.ISessionFactory
+                                        .WithOptions()
+                                        .Interceptor(new ContextInterceptor())
+                                        .OpenSession())
+            {
+                using (ITransaction transaction = session.BeginTransaction())
+                {
+                    var query = session.Query<Customer>().Where(x => x.Addresses.Any(y => y.BankAddressId.HasValue && y.BankAddressId == y.BankAddressId2));
+
+                    string querySqlString = GetGeneratedSql(query, session);
+
+                    Assert.IsTrue(!querySqlString.Contains("cast("));
+                }
+            }
+        }
+
         public string GetGeneratedSql(IQueryable queryable, ISession session)
         {
             var sessionImp = (ISessionImplementor)session;
