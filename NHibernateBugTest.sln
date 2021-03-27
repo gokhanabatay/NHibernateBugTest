@@ -1,13 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2035
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NHibernateBugTest", "NHibernateBugTest\NHibernateBugTest.csproj", "{E55C3D9C-EE6C-4368-82CA-5BEBBA3A79D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbConnectionTest", "DbConnectionTest\DbConnectionTest.csproj", "{0C7B4205-03D7-456E-9114-10208B7B3D97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbConnectionTest", "DbConnectionTest\DbConnectionTest.csproj", "{0C7B4205-03D7-456E-9114-10208B7B3D97}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{8EC50AC4-7A7C-4662-AA68-286A0BFA566E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication", "WebApplication\WebApplication.csproj", "{8EC50AC4-7A7C-4662-AA68-286A0BFA566E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{874BA2BE-4927-4F50-9645-7D6345000054}"
+	ProjectSection(SolutionItems) = preProject
+		nuget.config = nuget.config
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication.Test", "WebApplication.Test\WebApplication.Test.csproj", "{62F5A225-23A8-4108-8A59-B84ED1B52F79}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +34,10 @@ Global
 		{8EC50AC4-7A7C-4662-AA68-286A0BFA566E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EC50AC4-7A7C-4662-AA68-286A0BFA566E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EC50AC4-7A7C-4662-AA68-286A0BFA566E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62F5A225-23A8-4108-8A59-B84ED1B52F79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62F5A225-23A8-4108-8A59-B84ED1B52F79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62F5A225-23A8-4108-8A59-B84ED1B52F79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62F5A225-23A8-4108-8A59-B84ED1B52F79}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

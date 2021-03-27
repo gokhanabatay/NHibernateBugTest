@@ -1,7 +1,7 @@
 ﻿using FluentNHibernate.Mapping;
 using NHibernate;
 
-namespace WebApplication1.Session
+namespace WebApplication.Session
 {
     public class MemberConditionFilter : FilterDefinition
     {

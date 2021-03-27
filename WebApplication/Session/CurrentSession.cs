@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebApplication1.Session
+namespace WebApplication.Session
 {
     public static class CurrentSession
     {

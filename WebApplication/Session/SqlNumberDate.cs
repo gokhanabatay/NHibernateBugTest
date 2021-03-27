@@ -5,7 +5,7 @@ using System;
 using System.Data;
 using System.Data.Common;
 
-namespace WebApplication1.Session
+namespace WebApplication.Session
 {
     /// <summary>
     /// Short Number Date support with format yyyyMMdd

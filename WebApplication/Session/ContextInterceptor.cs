@@ -1,6 +1,6 @@
 ﻿using NHibernate;
 
-namespace WebApplication1.Session
+namespace WebApplication.Session
 {
     public class ContextInterceptor : EmptyInterceptor
     {

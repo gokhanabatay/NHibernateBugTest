@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace WebApplication1.Session
+namespace WebApplication.Session
 {
     /// <summary>
     /// SessionProvider NHibernate Helper

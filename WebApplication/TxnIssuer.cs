@@ -1,7 +1,7 @@
 ﻿using FluentNHibernate.Mapping;
 using System;
 
-namespace WebApplication1
+namespace WebApplication
 {
     public class TxnIssuer 
     {   public virtual long Guid { get; set; }

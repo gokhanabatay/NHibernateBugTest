@@ -11,6 +11,7 @@
     <property name="track_session_id">true</property>
     <property name="current_session_context_class">thread_static</property>
     <property name="default_flush_mode">Commit</property>
+    <property name="hbm2ddl.auto">create</property>
     <property name="cache.use_second_level_cache">false</property>
     <property name="cache.use_query_cache">false</property>
     <property name="default_batch_fetch_size">50</property>
