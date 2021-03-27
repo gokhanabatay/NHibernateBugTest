@@ -4,6 +4,7 @@ using NHibernate.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WebApplication.Session;
 
 namespace WebApplication.Controllers
 {
@@ -24,7 +25,8 @@ namespace WebApplication.Controllers
                         TxnIssuer txnIssuer = new TxnIssuer()
                         {
                             CycleMoved = "N",
-                            MrcDailyMoved = "N"
+                            MrcDailyMoved = "N",
+                            MbrId = Session.CurrentSession.MbrId
                         };
 
                         session.Save(txnIssuer);
@@ -43,7 +45,10 @@ namespace WebApplication.Controllers
         {
             try
             {
-                using (ISession session = Session.SessionProvider.ISessionFactory.OpenSession())
+                using (ISession session = Session.SessionProvider.ISessionFactory
+                    .WithOptions()
+                    .Interceptor(new ContextInterceptor())
+                    .OpenSession())
                 {
                     using (ITransaction transaction = session.BeginTransaction())
                     {
