@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentNHibernate" Version="2.1.2" />
-    <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="log4net" Version="2.0.10" />
     <PackageReference Include="Log4Net.Async.Standard" Version="3.1.0" />
     <PackageReference Include="NHibernate" Version="5.4.0-dev.3313" />
     <PackageReference Include="Npgsql" Version="4.1.4" />
