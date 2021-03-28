@@ -12,23 +12,10 @@ using System.Threading.Tasks;
 namespace NHibernateBugTest
 {
     [TestFixture]
-    public class TxnIssuerTest2
+    public class TxnIssuerDmlStyleUpdateTest
     {
         [SetUp]
         public void SetUpBase()
-        {
-            using (ISession session = SessionProvider.ISessionFactory.OpenSession())
-            {
-                using (ITransaction transaction = session.BeginTransaction())
-                {
-                    //just init connection and ISessionFactory
-                    transaction.Commit();
-                }
-            }
-        }
-
-        [Test, Order(1)]
-        public void Saves_TxnIssuer_Success()
         {
             using (ISession session = SessionProvider.ISessionFactory.OpenSession())
             {
@@ -39,7 +26,8 @@ namespace NHibernateBugTest
                         TxnIssuer txnIssuer = new TxnIssuer()
                         {
                             CycleMoved = "N",
-                            MrcDailyMoved = "N"
+                            MrcDailyMoved = "N",
+                            MbrId = Session.CurrentSession.MbrId
                         };
 
                         session.Save(txnIssuer);
@@ -47,23 +35,14 @@ namespace NHibernateBugTest
                     transaction.Commit();
                 }
             }
-
-            using (ISession session = SessionProvider.ISessionFactory.OpenSession())
-            {
-                using (ITransaction transaction = session.BeginTransaction())
-                {
-                    var count = session.Query<TxnIssuer>().ToList().Count;
-
-                    Assert.That( count > 0);
-                }
-            }
         }
 
-        [Test, Order(2)]
-        public void UpdateRetrieve_TxnIssuer_Success()
+        //Try rerun sometimes gets succeeded
+        [Test]
+        public void MultiThread_FilteredEntity_DmlStyleUpdateFails()
         {
 
-            int totalTask = 100;
+            int totalTask = 200;
             List<long> listOfGuids;
 
             using (ISession session = SessionProvider.ISessionFactory
@@ -77,20 +56,19 @@ namespace NHibernateBugTest
                 }
             }
 
-            var abc = GroupBy(listOfGuids, 5);
+            var pagedGuids = GroupBy(listOfGuids, 1);
             List<Task> tasks = new List<Task>();
             for (int i = 0; i < totalTask; i++)
             {
-                List<long> guid = abc[i];
-                int taskId = i + 1;
-                Task task = Task.Run(() => UpdateIssuerTxnAsync(taskId, guid));
+                List<long> guids = pagedGuids[i];
+                Task task = Task.Run(() => UpdateIssuerTxnAsync(guids));
                 tasks.Add(task);
 
             }
 
             Task.WaitAll(tasks.ToArray());
 
-            async Task UpdateIssuerTxnAsync(int taskNumber, List<long> guids)
+            async Task UpdateIssuerTxnAsync(List<long> guids)
             {
                 using (ISession session = SessionProvider.ISessionFactory
                                         .WithOptions()
@@ -99,16 +77,15 @@ namespace NHibernateBugTest
                 {
                     using (ITransaction transaction = session.BeginTransaction())
                     {
-                        //Below query updates MrcDailyMoved and MrcDailyMovedDate with success
-                       var rowcount= session.Query<TxnIssuer>()
+                       await session.Query<TxnIssuer>()
                                    .Where(x => guids.Contains(x.Guid))
-                                   .Update(x => new TxnIssuer
+                                   .UpdateAsync(x => new TxnIssuer
                                    {
                                        MrcDailyMoved = "Y",
                                        MrcDailyMovedDate = DateTime.Now
-                                   });
+                                   }).ConfigureAwait(false);
 
-                        transaction.Commit();
+                        await transaction.CommitAsync().ConfigureAwait(false);
                     }
                 }
             }
